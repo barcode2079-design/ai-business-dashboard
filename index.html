@@ -2,139 +2,51 @@
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI-автоматизация бизнеса</title>
-<link rel="stylesheet" href="theme.css"><link rel="stylesheet" href="polish.css">
+<link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
-<script src="data/goals.js"></script><script src="data/metrics.js"></script>
-<script src="dash-shim.js"></script>
-</head><body><div id="dash-root">
-<style>
-.ai{font-family:var(--font-anthropic-sans);color:var(--color-fg);max-width:1100px;margin-inline:auto}
-.ai h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0 0 4px}
-.ai .sub{color:var(--color-fg-muted);margin:0 0 var(--cds-gap-md)}
-.ai .tabs{display:flex;gap:8px;margin-bottom:var(--cds-gap-md)}
-.ai .tab{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:6px 14px;color:var(--color-fg);font:inherit;cursor:pointer}
-.ai .tab[aria-selected=true]{background:var(--color-fg);color:var(--color-bg)}
-.ai .card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg)}
-.ai .card h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0 0 2px}
-.ai .note{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin:0 0 var(--cds-gap-sm)}
-.ai .grid{display:grid;gap:var(--cds-gap-md);grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));margin-bottom:var(--cds-gap-md)}
-.ai .tiles{display:grid;gap:var(--cds-gap-md);grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));margin-bottom:var(--cds-gap-md)}
-.ai .tile .n{font-family:var(--font-anthropic-serif);font-size:2rem;font-variant-numeric:tabular-nums;display:block}
-.ai .tile .l{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
-.ai .chain{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin-bottom:var(--cds-gap-md)}
-.ai .chain .card{flex:1 1 9rem;padding:var(--cds-pad-md)}
-.ai .chain .arr{align-self:center;color:var(--color-fg-muted)}
-.ai .chain b{display:block;font-weight:500}
-.ai .chain span{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
-.ai .row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) 3rem;gap:10px;align-items:center;padding:6px 0;font-size:var(--cds-font-size-body)}
-.ai .row .bar{height:8px;border-radius:4px;background:var(--cds-chart-grid);overflow:hidden}
-.ai .row .bar i{display:block;height:100%;background:var(--cds-chart-status-ok,var(--color-ok));border-radius:4px}
-.ai .row .p{text-align:right;font-variant-numeric:tabular-nums}
-.ai .row .st{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);display:block}
-.ai .goalbar{height:14px;border-radius:7px;background:var(--cds-chart-grid);overflow:hidden;margin:8px 0}
-.ai .goalbar i{display:block;height:100%;background:var(--color-ok)}
-.ai .chart{min-height:200px;position:relative}
-.ai .tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);display:none;white-space:nowrap}
-.ai [data-dash-source-state=empty]{color:transparent}
-.ai .leg{display:flex;gap:12px;flex-wrap:wrap;font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:4px}
-.ai .leg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
-.ai [hidden]{display:none!important}
-@media(max-width:600px){.ai .chain .arr{display:none}.ai .row{grid-template-columns:1fr 3rem}.ai .row .bar{grid-column:1/3;order:3}.ai .tab{flex:1}}
-</style>
-<div class="ai">
-<h1>AI-автоматизация бизнеса</h1>
-<p class="sub">Проект 1: производство металлоконструкций · цель на год — 2 клиента на промышленные ангары. Данные пока примерные.</p>
-<div class="tabs" role="tablist">
-<button class="tab" role="tab" id="t-biz" aria-selected="true">Мой бизнес</button>
-<button class="tab" role="tab" id="t-cl" aria-selected="false">Клиент: металлоконструкции</button>
+<script src="data/goals.js"></script><script src="data/metrics.js"></script><script src="data/sources.js"></script><script src="data/leads.js"></script>
+</head><body>
+<div class="app">
+<aside class="side">
+ <div class="brand"><span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 18V9M10 18V5M16 18v-7M22 18H2"/></svg></span>AI Studio</div>
+ <button class="nav" id="n-biz" aria-selected="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Мой бизнес</button>
+ <button class="nav" id="n-cl" aria-selected="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12M9 21v-7h6v7"/></svg>Клиент</button>
+ <div class="foot">Проект 1: металлоконструкции<br>Данные примерные</div>
+</aside>
+<main>
+<div class="top">
+ <div><h1 id="title">Мой бизнес</h1><p class="sub" id="sub">AI-автоматизация: цели проекта и главный результат — 2 клиента на промышленные ангары за год.</p></div>
+ <div class="filters" id="filters" hidden><select id="period" aria-label="Период"><option value="12">Весь год</option><option value="6">6 месяцев</option><option value="3">3 месяца</option></select></div>
 </div>
 
 <section id="v-biz">
-<div class="chain">
-<div class="card"><b>Я</b><span>AI-автоматизация бизнеса</span></div><div class="arr">→</div>
-<div class="card"><b>Мой агент</b><span>строит и ведёт агентов клиентов</span></div><div class="arr">→</div>
-<div class="card"><b>Заказчик</b><span>производство металлоконструкций (и другие бизнесы)</span></div><div class="arr">→</div>
-<div class="card"><b>Агент заказчика</b><span>отвечает его клиентам 24/7</span></div><div class="arr">→</div>
-<div class="card"><b>Клиент</b><span>покупатель ангара</span></div>
-</div>
-<div class="grid">
-<div class="card"><h2>Цели проекта</h2><p class="note">Готовность каждой цели, %</p>
-<div id="goals" data-source="goals" class="dash-skeleton" style="min-height:220px"></div></div>
-<div class="card"><h2>Главная цель бизнеса</h2><p class="note">Клиенты на промышленные ангары за год</p>
-<div><span class="big" style="font-family:var(--font-anthropic-serif);font-size:2.6rem"><span data-source="metrics" data-field="clients" data-where="month=2026-10">—</span> из 2</span></div>
-<div class="goalbar" id="gb1" data-source="metrics"><i style="width:0"></i></div>
-<p class="note">Заявок в этом месяце: <span data-source="metrics" data-field="leads" data-where="month=2026-10">—</span></p></div>
-</div>
+ <div class="chain">
+  <div class="card"><b>Я</b><span>AI-автоматизация бизнеса</span></div><div class="arr">→</div>
+  <div class="card"><b>Мой агент</b><span>строит и ведёт агентов клиентов</span></div><div class="arr">→</div>
+  <div class="card"><b>Заказчик</b><span>металлоконструкции и другие бизнесы</span></div><div class="arr">→</div>
+  <div class="card"><b>Агент заказчика</b><span>отвечает клиентам 24/7</span></div><div class="arr">→</div>
+  <div class="card"><b>Клиент</b><span>покупатель ангара</span></div>
+ </div>
+ <div class="grid g3">
+  <div class="card"><h2>Цели проекта</h2><p class="note">Готовность каждой цели</p><div id="goals"></div></div>
+  <div class="card"><h2>Главная цель</h2><p class="note">Клиенты на промышленные ангары за год</p>
+   <div class="big"><span id="cl-now">—</span> из 2</div><div class="goalbar"><i id="gb" style="width:0"></i></div>
+   <p class="note" id="gb-note"></p></div>
+ </div>
 </section>
 
 <section id="v-cl" hidden>
-<div class="tiles">
-<div class="card tile"><span class="n" data-source="metrics" data-field="views" data-where="month=2026-10">—</span><span class="l">просмотров в октябре</span></div>
-<div class="card tile"><span class="n" data-source="metrics" data-field="posts" data-where="month=2026-10">—</span><span class="l">постов в октябре</span></div>
-<div class="card tile"><span class="n" data-source="metrics" data-field="reviews" data-where="month=2026-10">—</span><span class="l">отзывов в октябре</span></div>
-<div class="card tile"><span class="n" data-source="metrics" data-field="questions" data-where="month=2026-10">—</span><span class="l">вопросов агенту в октябре</span></div>
-<div class="card tile"><span class="n" data-source="metrics" data-field="leads" data-where="month=2026-10">—</span><span class="l">заявок в октябре</span></div>
-</div>
-<div class="grid">
-<div class="card"><h2>Просмотры</h2><p class="note">По месяцам, 2026</p><div class="chart" id="c1" data-source="metrics"></div></div>
-<div class="card"><h2>Вопросы, заявки, отзывы</h2><p class="note">По месяцам, 2026</p><div class="chart" id="c2" data-source="metrics"></div><div class="leg" id="leg2"></div></div>
-</div>
+ <div class="tiles" id="tiles"></div>
+ <div class="grid g3">
+  <div class="card"><h2>Просмотры</h2><p class="note" id="c1-note"></p><div class="chart" id="c1"></div></div>
+  <div class="card"><h2>Источники заявок</h2><p class="note">Откуда пришли обращения</p><div class="chart" id="c3"></div><div class="leg" id="leg3"></div></div>
+ </div>
+ <div class="grid g2">
+  <div class="card"><h2>Вопросы, заявки, отзывы</h2><p class="note" id="c2-note"></p><div class="chart" id="c2"></div><div class="leg" id="leg2"></div></div>
+  <div class="card"><h2>Последние заявки</h2><p class="note">Обращения на ангары и склады</p><div class="tw"><table><thead><tr><th>Дата</th><th>Заказчик</th><th>Источник</th><th>Объект</th><th>Статус</th></tr></thead><tbody id="leads"></tbody></table></div></div>
+ </div>
 </section>
+</main>
 </div>
-<script>
-(function(){
-const $=s=>document.querySelector(s);
-const fmt=d3.format(',');
-function tab(cl){$('#v-biz').hidden=cl;$('#v-cl').hidden=!cl;$('#t-biz').setAttribute('aria-selected',!cl);$('#t-cl').setAttribute('aria-selected',cl);draw();}
-$('#t-biz').onclick=()=>tab(false);$('#t-cl').onclick=()=>tab(true);
-const MN=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
-const mlab=m=>MN[+m.slice(5,7)-1];
-function line(el,rows,keys,cols,names,area){
- el.replaceChildren();
- const w=el.clientWidth||320,h=200,m={l:44,r:12,t:10,b:24};
- if(!rows.length)return;
- const x=d3.scalePoint(rows.map(r=>r.month),[m.l,w-m.r]).padding(.1);
- const max=d3.max(rows,r=>d3.max(keys,k=>+r[k]))||1;
- const y=d3.scaleLinear([0,max],[h-m.b,m.t]).nice();
- const svg=d3.select(el).append('svg').attr('width','100%').attr('viewBox',`0 0 ${w} ${h}`);
- svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',y).attr('y2',y).attr('stroke','var(--cds-chart-grid)');
- svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x',m.l-6).attr('y',d=>y(d)+4).attr('text-anchor','end').attr('fill','var(--color-fg-muted)').attr('font-size',11).text(d=>fmt(d));
- svg.append('g').selectAll('text').data(rows.filter((r,i)=>i%2==0)).join('text').attr('x',r=>x(r.month)).attr('y',h-6).attr('text-anchor','middle').attr('fill','var(--color-fg-muted)').attr('font-size',11).text(r=>mlab(r.month));
- keys.forEach((k,i)=>{
-  svg.append('path').datum(rows).attr('fill','none').attr('stroke',cols[i]).attr('stroke-width',2).attr('stroke-linecap','round').attr('stroke-linejoin','round').attr('d',d3.line().x(r=>x(r.month)).y(r=>y(+r[k])));
- });
- const tip=d3.select(el).append('div').attr('class','tip');
- const rule=svg.append('line').attr('y1',m.t).attr('y2',h-m.b).attr('stroke','var(--cds-chart-reference)').style('display','none');
- svg.append('rect').attr('x',0).attr('y',0).attr('width',w).attr('height',h).attr('fill','transparent').on('mousemove',ev=>{
-  const px=d3.pointer(ev)[0];const r=d3.least(rows,r=>Math.abs(x(r.month)-px));
-  rule.attr('x1',x(r.month)).attr('x2',x(r.month)).style('display',null);
-  tip.style('display','block').style('left',Math.min(Math.max(x(r.month)+10,0),w-150)+'px').style('top','8px').html('');
-  tip.append('div').text(mlab(r.month)+' 2026');
-  keys.forEach((k,i)=>{const d=tip.append('div');d.append('span').style('color',cols[i]).text('● ');d.append('span').text(names[i]+': '+fmt(+r[k]));});
- }).on('mouseleave',()=>{tip.style('display','none');rule.style('display','none');});
-}
-function draw(){
- const g=dash.data('goals'),mt=dash.data('metrics');
- const ge=$('#goals');
- if(g.status==='ok'){ge.classList.remove('dash-skeleton');ge.replaceChildren();
-  g.data.forEach(r=>{const d=document.createElement('div');d.className='row';
-   const a=document.createElement('div');a.textContent=r.goal;const s=document.createElement('span');s.className='st';s.textContent=r.stage;a.append(s);
-   const b=document.createElement('div');b.className='bar';const i=document.createElement('i');i.style.width=Math.round(100*(+r.progress))+'%';b.append(i);
-   const p=document.createElement('div');p.className='p';p.textContent=Math.round(100*(+r.progress))+'%';
-   d.append(a,b,p);ge.append(d);});}
- else if(g.status==='error'){ge.classList.remove('dash-skeleton');ge.textContent='Failed to load';}
- if(mt.status==='ok'){
-  const rows=mt.data;const last=rows[rows.length-1];
-  if(last){$('#gb1 i').style.width=Math.min(100,100*(+last.clients)/2)+'%';}
-  if(!$('#v-cl').hidden){
-   line($('#c1'),rows,['views'],[dash.colors[0]],['Просмотры']);
-   line($('#c2'),rows,['questions','leads','reviews'],[dash.colors[0],dash.colors[1],dash.colors[2]],['Вопросы','Заявки','Отзывы']);
-   $('#leg2').replaceChildren(...['Вопросы','Заявки','Отзывы'].map((n,i)=>{const s=document.createElement('span');const d=document.createElement('i');d.style.background=dash.colors[i];s.append(d,n);return s;}));
-  }
- }
-}
-dash.onData(draw);
-})();
-</script>
-
-</div></body></html>
+<script src="app.js"></script>
+</body></html>
